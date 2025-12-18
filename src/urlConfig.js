@@ -1,4 +1,4 @@
-export const api = "http://localhost:2000/api";
+export const api = "https://burgerfreaks-backend-new.onrender.com/api";
 export const generatePublicUrl = (filename) => {
-  return `http://localhost:2000/public/${filename}`;
+  return `https://burgerfreaks-backend-new.onrender.com/public/${filename}`;
 };
