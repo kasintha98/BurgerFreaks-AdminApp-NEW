@@ -43,7 +43,7 @@ export default (state = initState, action) => {
       state = {
         ...initState,
         loading: false,
-        error: action.payload.error,
+        error: action?.payload?.error,
       };
       break;
     case inventoryConstants.DELETE_INVENTORY_REQUEST:
@@ -53,7 +53,7 @@ export default (state = initState, action) => {
       state = { ...state, loading: false };
       break;
     case inventoryConstants.DELETE_INVENTORY_FAILURE:
-      state = { ...state, error: action.payload.error, loading: false };
+      state = { ...state, error: action?.payload?.error, loading: false };
       break;
     case inventoryConstants.GET_INVENTORY_SUCCESS:
       state = {
@@ -74,7 +74,7 @@ export default (state = initState, action) => {
       state = {
         ...initState,
         loading: false,
-        error: action.payload.error,
+        error: action?.payload?.error,
       };
       break;
   }

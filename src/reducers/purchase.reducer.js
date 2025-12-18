@@ -41,7 +41,7 @@ export default (state = initState, action) => {
       state = {
         ...initState,
         loading: false,
-        error: action.payload.error,
+        error: action?.payload?.error,
       };
       break;
     case purchaseConstants.DELETE_PURCHASE_REQUEST:
@@ -51,7 +51,7 @@ export default (state = initState, action) => {
       state = { ...state, loading: false };
       break;
     case purchaseConstants.DELETE_PURCHASE_FAILURE:
-      state = { ...state, error: action.payload.error, loading: false };
+      state = { ...state, error: action?.payload?.error, loading: false };
       break;
     case purchaseConstants.GET_PURCHASE_SUCCESS:
       state = {
@@ -72,7 +72,7 @@ export default (state = initState, action) => {
       state = {
         ...initState,
         loading: false,
-        error: action.payload.error,
+        error: action?.payload?.error,
       };
       break;
   }

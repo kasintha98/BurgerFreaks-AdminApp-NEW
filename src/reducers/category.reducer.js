@@ -48,7 +48,7 @@ export default (state = initState, action) => {
       state = {
         ...initState,
         loading: false,
-        error: action.payload.error,
+        error: action?.payload?.error,
       };
       break;
     case categoryConstants.UPDATE_CATEGORY_REQUEST:
@@ -58,7 +58,7 @@ export default (state = initState, action) => {
       state = { ...state, loading: false };
       break;
     case categoryConstants.UPDATE_CATEGORY_FAILURE:
-      state = { ...state, error: action.payload.error, loading: false };
+      state = { ...state, error: action?.payload?.error, loading: false };
       break;
     case categoryConstants.DELETE_CATEGORY_REQUEST:
       state = { ...state, loading: true };
@@ -67,7 +67,7 @@ export default (state = initState, action) => {
       state = { ...state, loading: false };
       break;
     case categoryConstants.DELETE_CATEGORY_FAILURE:
-      state = { ...state, error: action.payload.error, loading: false };
+      state = { ...state, error: action?.payload?.error, loading: false };
       break;
   }
   return state;
