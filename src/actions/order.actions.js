@@ -22,7 +22,12 @@ export const getCustomerOrders = () => {
         });
       }
     } catch (error) {
-      console.log(error);
+      toast.error("Something went wrong!");
+      console.log(error.response);
+      dispatch({
+        type: orderConstants.GET_CUSTOMER_ORDER_FAILURE,
+        payload: { error: error?.response?.data.error },
+      });
     }
   };
 };
@@ -57,7 +62,12 @@ export const updateOrder = (payload) => {
         });
       }
     } catch (error) {
-      console.log(error);
+      toast.error("Something went wrong!");
+      console.log(error.response);
+      dispatch({
+        type: orderConstants.UPDATE_CUSTOMER_ORDER_FAILURE,
+        payload: { error: error?.response?.data.error },
+      });
     }
   };
 };

@@ -7,52 +7,63 @@ import { toast } from "react-toastify";
 export const login = (user) => {
   return async (dispatch) => {
     dispatch({ type: authConstants.LOGIN_REQUEST });
-    //post request from front end to signin with the data from frontend
-    const res = await axios.post(`/admin/signin`, {
-      ...user,
-    });
 
-    //if respond is 200 (user successfully login)
-    if (res.status === 200) {
-      const { token, user } = res.data;
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-      dispatch({
-        type: authConstants.LOGIN_SUCCESS,
-        payload: {
-          token,
-          user,
-        },
+    try {
+      //post request from front end to signin with the data from frontend
+      const res = await axios.post(`/admin/signin`, {
+        ...user,
       });
 
-      //show success notification
-      toast.success("Login Success!", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    }
-    //if backend error
-    if (res.status === 202) {
+      //if respond is 200 (user successfully login)
+      if (res.status === 200) {
+        const { token, user } = res.data;
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        dispatch({
+          type: authConstants.LOGIN_SUCCESS,
+          payload: {
+            token,
+            user,
+          },
+        });
+
+        //show success notification
+        toast.success("Login Success!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+      //if backend error
+      if (res.status === 202) {
+        dispatch({
+          type: authConstants.LOGIN_FAILURE,
+          payload: { errormsg: res.data.errormsg },
+        });
+        //show error notification
+        toast.error(res.data.errormsg, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    } catch (error) {
+      console.log(error?.response?.data);
+      toast.error("Something went wrong!");
       dispatch({
         type: authConstants.LOGIN_FAILURE,
-        payload: { errormsg: res.data.errormsg },
-      });
-      //show error notification
-      toast.error(res.data.errormsg, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
+        payload: { errormsg: error?.response?.data?.error },
       });
     }
+
   };
 };
 
@@ -61,43 +72,53 @@ export const signup = (user) => {
   return async (dispatch) => {
     dispatch({ type: userConstants.USER_SIGNUP_REQUEST });
 
-    const res = await axios.post(`/admin/signup`, user);
+    try {
+      const res = await axios.post(`/admin/signup`, user);
 
-    //if respond is 201 (user successfully signup)
-    if (res.status === 201) {
-      dispatch({
-        type: userConstants.USER_SIGNUP_SUCCESS,
-        payload: { error: res.data },
-      });
+      //if respond is 201 (user successfully signup)
+      if (res.status === 201) {
+        dispatch({
+          type: userConstants.USER_SIGNUP_SUCCESS,
+          payload: { error: res.data },
+        });
 
-      //show success notification
-      toast.success("Signup Success!", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    } else {
-      //if backend error
+        //show success notification
+        toast.success("Signup Success!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } else {
+        //if backend error
+        dispatch({
+          type: userConstants.USER_SIGNUP_FAILURE,
+          payload: { errormsg: res.data.errormsg },
+        });
+
+        //show error notification
+        toast.error(res.data.errormsg, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    } catch (error) {
+      console.log(error?.response?.data);
+      toast.error("Something went wrong!");
       dispatch({
         type: userConstants.USER_SIGNUP_FAILURE,
-        payload: { errormsg: res.data.errormsg },
-      });
-
-      //show error notification
-      toast.error(res.data.errormsg, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
+        payload: { errormsg: error?.response?.data.error },
       });
     }
+
   };
 };
 
@@ -130,19 +151,29 @@ export const signout = () => {
   return async (dispatch) => {
     dispatch({ type: authConstants.LOGIN_REQUEST });
 
-    const res = await axios.post("/admin/signout");
+    try {
+      const res = await axios.post("/admin/signout");
 
-    //if respond is 200 (user successfully signout)
-    if (res.status === 200) {
-      localStorage.clear();
-      dispatch({
-        type: authConstants.LOGOUT_SUCCESS,
-      });
-    } else {
+      //if respond is 200 (user successfully signout)
+      if (res.status === 200) {
+        localStorage.clear();
+        dispatch({
+          type: authConstants.LOGOUT_SUCCESS,
+        });
+      } else {
+        dispatch({
+          type: authConstants.LOGOUT_FAILURE,
+          payload: { error: res.data.error },
+        });
+      }
+    } catch (error) {
+      console.log(error?.response?.data);
+      toast.error("Something went wrong!");
       dispatch({
         type: authConstants.LOGOUT_FAILURE,
-        payload: { error: res.data.error },
+        payload: { error: error?.response?.data.error },
       });
     }
+
   };
 };

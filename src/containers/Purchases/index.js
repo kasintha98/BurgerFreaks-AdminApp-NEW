@@ -120,6 +120,7 @@ export default function Purchases(props) {
     setDescription("");
     setQty(0);
     setUnitPrice(0);
+    handleClose();
   };
 
   const deletePurchaseData = (inv) => {

@@ -91,6 +91,7 @@ function Category(props) {
     setCategoryName("");
     setCategoryDescription("");
     setCategoryImage("");
+    handleClose();
   };
 
   const handleClose = () => {

@@ -92,6 +92,7 @@ export default function Inventory(props) {
     setName("");
     setDescription("");
     setQty(0);
+    handleClose();
   };
 
   const deleteInventoryData = (inv) => {

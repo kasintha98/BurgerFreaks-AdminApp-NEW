@@ -203,6 +203,7 @@ function Products(props) {
     setProductQty("");
     setProductDescription("");
     setProductImage([]);
+    handleClose();
     //window.location.reload();
   };
 

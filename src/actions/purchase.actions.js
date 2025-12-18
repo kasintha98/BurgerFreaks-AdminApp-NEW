@@ -7,24 +7,36 @@ export const getPurchase = () => {
   return async (dispatch) => {
     dispatch({ type: purchaseConstants.GET_PURCHASE_REQUEST });
 
-    const res = await axios.get("/purchase");
-    console.log(res);
+    try {
+      const res = await axios.get("/purchase");
+      console.log(res);
 
-    if (res.status === 200) {
-      const { purchase } = res.data;
+      if (res.status === 200) {
+        const { purchase } = res.data;
 
-      dispatch({
-        type: purchaseConstants.GET_PURCHASE_SUCCESS,
-        payload: { purchase: purchase },
-      });
-    } else {
+        dispatch({
+          type: purchaseConstants.GET_PURCHASE_SUCCESS,
+          payload: { purchase: purchase },
+        });
+      } else {
+        dispatch({
+          type: purchaseConstants.GET_PURCHASE_FAILURE,
+          payload: {
+            error: res.data.error,
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error?.response?.data);
+      toast.error("Something went wrong!");
       dispatch({
         type: purchaseConstants.GET_PURCHASE_FAILURE,
         payload: {
-          error: res.data.error,
+          error: error?.response?.data.error,
         },
       });
     }
+
   };
 };
 
@@ -68,7 +80,12 @@ export const addPurchase = (form) => {
       }
       console.log(res);
     } catch (error) {
-      console.log(error.reponse);
+      console.log(error?.response?.data);
+      toast.error("Something went wrong!");
+      dispatch({
+        type: purchaseConstants.ADD_PURCHASE_FAILURE,
+        payload: error?.response?.data.error,
+      });
     }
   };
 };
@@ -78,39 +95,49 @@ export const deletePurchase = (id) => {
   return async (dispatch) => {
     dispatch({ type: purchaseConstants.DELETE_PURCHASE_REQUEST });
 
-    const res = await axios.delete("/purchase/delete/" + id);
+    try {
+      const res = await axios.delete("/purchase/delete/" + id);
 
-    if (res.status === 200) {
-      dispatch(getPurchase());
-      dispatch({
-        type: purchaseConstants.DELETE_PURCHASE_SUCCESS,
-      });
+      if (res.status === 200) {
+        dispatch(getPurchase());
+        dispatch({
+          type: purchaseConstants.DELETE_PURCHASE_SUCCESS,
+        });
 
-      toast.success(res.data.msg, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    } else {
-      const { error } = res.data;
+        toast.success(res.data.msg, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } else {
+        const { error } = res.data;
+        dispatch({
+          type: purchaseConstants.DELETE_PURCHASE_FAILURE,
+          payload: { error },
+        });
+
+        toast.error(res.data.error, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    } catch (error) {
+      console.log(error?.response?.data);
+      toast.error("Something went wrong!");
       dispatch({
         type: purchaseConstants.DELETE_PURCHASE_FAILURE,
-        payload: { error },
-      });
-
-      toast.error(res.data.error, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
+        payload: { error: error?.response?.data.error },
       });
     }
+
   };
 };

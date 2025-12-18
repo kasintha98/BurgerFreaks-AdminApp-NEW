@@ -7,24 +7,36 @@ const getAllCategory = () => {
   return async (dispatch) => {
     dispatch({ type: categoryConstants.GET_ALL_CATEGORIES_REQUEST });
 
-    const res = await axios.get("category/getcategories");
-    console.log(res);
+    try {
+      const res = await axios.get("category/getcategories");
+      console.log(res);
 
-    if (res.status === 200) {
-      const { categories } = res.data;
+      if (res.status === 200) {
+        const { categories } = res.data;
 
-      dispatch({
-        type: categoryConstants.GET_ALL_CATEGORIES_SUCCESS,
-        payload: { categories: categories },
-      });
-    } else {
+        dispatch({
+          type: categoryConstants.GET_ALL_CATEGORIES_SUCCESS,
+          payload: { categories: categories },
+        });
+      } else {
+        dispatch({
+          type: categoryConstants.GET_ALL_CATEGORIES_FAILURE,
+          payload: {
+            error: res.data.error,
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error?.response?.data);
+      toast.error("Something went wrong!");
       dispatch({
         type: categoryConstants.GET_ALL_CATEGORIES_FAILURE,
         payload: {
-          error: res.data.error,
+          error: error?.response?.data.error,
         },
       });
     }
+
   };
 };
 
@@ -69,6 +81,11 @@ export const addCategory = (form) => {
       console.log(res);
     } catch (error) {
       console.log(error.reponse);
+      toast.error("Something went wrong!");
+      dispatch({
+        type: categoryConstants.ADD_NEW_CATEGORY_FAILURE,
+        payload: error?.response?.data.error,
+      });
     }
   };
 };
@@ -78,36 +95,46 @@ export const updateCategory = (form) => {
   return async (dispatch) => {
     dispatch({ type: categoryConstants.UPDATE_CATEGORY_REQUEST });
 
-    const res = await axios.post("/category/update", form);
-    if (res.status === 201) {
-      dispatch({ type: categoryConstants.UPDATE_CATEGORY_SUCCESS });
-      dispatch(getAllCategory());
+    try {
+      const res = await axios.post("/category/update", form);
+      if (res.status === 201) {
+        dispatch({ type: categoryConstants.UPDATE_CATEGORY_SUCCESS });
+        dispatch(getAllCategory());
 
-      toast.success(res.data.msg, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    } else {
-      const { error } = res.data;
+        toast.success(res.data.msg, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } else {
+        const { error } = res.data;
+        dispatch({
+          type: categoryConstants.UPDATE_CATEGORY_FAILURE,
+          payload: { error },
+        });
+        toast.error(res.data.error, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    } catch (error) {
+      console.log(error?.response?.data);
+      toast.error("Something went wrong!");
       dispatch({
         type: categoryConstants.UPDATE_CATEGORY_FAILURE,
-        payload: { error },
-      });
-      toast.error(res.data.error, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
+        payload: { error: error?.response?.data.error },
       });
     }
+
   };
 };
 
@@ -115,40 +142,50 @@ export const deleteCategory = (id) => {
   return async (dispatch) => {
     dispatch({ type: categoryConstants.DELETE_CATEGORY_REQUEST });
 
-    const res = await axios.delete("category/" + id);
+    try {
+      const res = await axios.delete("category/" + id);
 
-    if (res.status === 200) {
-      dispatch(getAllCategory());
-      dispatch({
-        type: categoryConstants.DELETE_CATEGORY_SUCCESS,
-      });
+      if (res.status === 200) {
+        dispatch(getAllCategory());
+        dispatch({
+          type: categoryConstants.DELETE_CATEGORY_SUCCESS,
+        });
 
-      toast.success(res.data.msg, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    } else {
-      const { error } = res.data;
+        toast.success(res.data.msg, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } else {
+        const { error } = res.data;
+        dispatch({
+          type: categoryConstants.DELETE_CATEGORY_FAILURE,
+          payload: { error },
+        });
+
+        toast.error(res.data.error, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    } catch (error) {
+      console.log(error?.response?.data);
+      toast.error("Something went wrong!");
       dispatch({
         type: categoryConstants.DELETE_CATEGORY_FAILURE,
-        payload: { error },
-      });
-
-      toast.error(res.data.error, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
+        payload: { error: error?.response?.data.error },
       });
     }
+
   };
 };
 
