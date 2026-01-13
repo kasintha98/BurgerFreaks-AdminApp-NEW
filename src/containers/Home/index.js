@@ -1,11 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { getCustomerOrders } from "../../actions";
 import { Jumbotron } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Layout from "../../components/Layouts";
 
 function Home(props) {
+  const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const order = useSelector((state) => state.order);
+
+  //get new orders on load
+  useEffect(() => {
+    dispatch(getCustomerOrders());
+  }, []);
 
   let orderNumbers = 0;
 

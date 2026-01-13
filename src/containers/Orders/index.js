@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../../components/Layouts";
 import { useDispatch, useSelector } from "react-redux";
 import { Row, Card, Button, Form, Table, FormControl } from "react-bootstrap";
@@ -6,7 +6,7 @@ import CurrencyFormat from "react-currency-format";
 import "./style.css";
 import axios from "axios";
 import { Col } from "react-bootstrap";
-import { updateOrder } from "../../actions";
+import { updateOrder, getCustomerOrders } from "../../actions";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 var dateFormat = require("dateformat");
@@ -17,6 +17,11 @@ function Orders(props) {
   const [keywords, setKeywords] = useState("");
   const [searchedOrders, setSearchedOrders] = useState();
   const dispatch = useDispatch();
+
+  //get new orders on load
+  useEffect(() => {
+    dispatch(getCustomerOrders());
+  }, []);
 
   //calling the action to update order
   const onOrderUpdate = (orderId) => {
