@@ -31,7 +31,7 @@ const buildNewProducts = (products, product) => {
 
 //const initialState = { products: [] };
 
-export default (state = initialState, action) => {
+const productReducer = (state = initialState, action) => {
   switch (action.type) {
     case productConstants.GET_ALL_PRODUCTS_SUCCESS:
       state = {
@@ -57,6 +57,9 @@ export default (state = initialState, action) => {
         loading: false,
       };
       break;
+    case productConstants.ADD_NEW_PRODUCT_FAILURE:
+      state = { ...state, error: action?.payload?.error, loading: false };
+      break;
     case productConstants.UPDATE_PRODUCT_REQUEST:
       state = { ...state, loading: true };
       break;
@@ -75,6 +78,10 @@ export default (state = initialState, action) => {
     case productConstants.DELETE_PRODUCT_FAILURE:
       state = { ...state, error: action?.payload?.error, loading: false };
       break;
+    default:
+      return state;
   }
   return state;
 };
+
+export default productReducer;

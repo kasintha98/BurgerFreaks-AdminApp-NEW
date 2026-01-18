@@ -6,7 +6,7 @@ function Footer(props) {
     <div>
       <div class="footer">
         <p>All Right Reserved - Burger Freakz &reg;</p>
-        <p>&copy; 2020</p>
+        <p>&copy; 2021</p>
       </div>
     </div>
   );

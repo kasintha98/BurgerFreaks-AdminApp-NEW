@@ -18,7 +18,7 @@ const buildNewInventory = (inventory, inventoryOne) => {
   ];
 };
 
-export default (state = initState, action) => {
+const inventoryReducer = (state = initState, action) => {
   switch (action.type) {
     case inventoryConstants.ADD_INVENTORY_REQUEST:
       state = {
@@ -77,6 +77,10 @@ export default (state = initState, action) => {
         error: action?.payload?.error,
       };
       break;
+    default:
+      break;
   }
   return state;
 };
+
+export default inventoryReducer;

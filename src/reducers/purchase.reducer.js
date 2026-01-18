@@ -19,7 +19,7 @@ const buildNewPurchases = (purchase, purchaseOne) => {
   ];
 };
 
-export default (state = initState, action) => {
+const purchaseReducer = (state = initState, action) => {
   switch (action.type) {
     case purchaseConstants.ADD_PURCHASE_REQUEST:
       state = {
@@ -75,6 +75,10 @@ export default (state = initState, action) => {
         error: action?.payload?.error,
       };
       break;
+    default:
+      break;
   }
   return state;
 };
+
+export default purchaseReducer;

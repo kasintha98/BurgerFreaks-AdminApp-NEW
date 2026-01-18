@@ -28,7 +28,7 @@ export const getEmployees = () => {
       }
     } catch (error) {
       console.log(error?.response?.data);
-      toast.error("Something went wrong!");
+      toast.error(error?.response?.data.error ||"Something went wrong!");
       dispatch({
         type: employeeConstants.GET_EMPLOYEE_FAILURE,
         payload: {

@@ -194,17 +194,21 @@ function Products(props) {
       form.append("productImages", pic);
     }
 
-    dispatch(addProduct(form));
-
-    setProductName("");
-    setProductPrice("");
-    setProductOffer("");
-    setProductCategory("");
-    setProductQty("");
-    setProductDescription("");
-    setProductImage([]);
-    handleClose();
-    //window.location.reload();
+    dispatch(addProduct(form))
+      .then(() => {
+        setProductName("");
+        setProductPrice("");
+        setProductOffer("");
+        setProductCategory("");
+        setProductQty("");
+        setProductDescription("");
+        setProductImage([]);
+        handleClose();
+      })
+      .catch((err) => {
+        console.log(err);
+        console.error(err);
+      });
   };
 
   const handleClose = () => {
@@ -376,7 +380,16 @@ function Products(props) {
     form.append("category", productCategoryUpdate._id);
 
     //updating the product with new form data and then updating the product list(getting the updated product list)
-    dispatch(updateProduct(form));
+    dispatch(updateProduct(form)).then(() => {
+      setProductName("");
+      setProductPrice("");
+      setProductOffer("");
+      setProductCategory("");
+      setProductQty("");
+      setProductDescription("");
+      setProductImage([]);
+      setUpdateProductModal(false);
+    })
   };
 
   console.log(productImage);
@@ -405,70 +418,70 @@ function Products(props) {
         <tbody className="text-center">
           {product.products.length > 0
             ? product.products.map((product) => (
-                <tr key={product._id}>
-                  <td>
-                    <div style={{ maxWidth: "100px" }}>
-                      <Carousel fade>
-                        {product.productImages.map((picture) => (
-                          <Carousel.Item>
-                            <div className="productImageContainer">
-                              <img
-                                src={generatePublicUrl(picture.img)}
-                                alt=""
-                              />
-                            </div>
-                          </Carousel.Item>
-                        ))}
-                      </Carousel>
-                    </div>
-                  </td>
-                  <td>{product.name}</td>
-                  <td>{product.description}</td>
-                  <td>
-                    {
-                      <CurrencyFormat
-                        value={product.price}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={"Rs. "}
-                        suffix={".00"}
-                      />
-                    }
-                  </td>
+              <tr key={product._id}>
+                <td>
+                  <div style={{ maxWidth: "100px" }}>
+                    <Carousel fade>
+                      {product.productImages.map((picture) => (
+                        <Carousel.Item>
+                          <div className="productImageContainer">
+                            <img
+                              src={generatePublicUrl(picture.img)}
+                              alt=""
+                            />
+                          </div>
+                        </Carousel.Item>
+                      ))}
+                    </Carousel>
+                  </div>
+                </td>
+                <td>{product.name}</td>
+                <td>{product.description}</td>
+                <td>
+                  {
+                    <CurrencyFormat
+                      value={product.price}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={"Rs. "}
+                      suffix={".00"}
+                    />
+                  }
+                </td>
 
-                  <td>{product.category.name}</td>
-                  <td>
-                    <ButtonGroup style={{ width: "100%" }}>
-                      <Button
-                        variant="success"
-                        onClick={() => {
-                          updateProductData(product);
-                        }}
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        variant="danger"
-                        onClick={() => {
-                          setDeleteProductModal(true);
-                          setCurrentProduct(product);
-                        }}
-                      >
-                        Delete
-                      </Button>
-                    </ButtonGroup>
+                <td>{product.category.name}</td>
+                <td>
+                  <ButtonGroup style={{ width: "100%" }}>
                     <Button
-                      style={{ width: "100%" }}
-                      size="sm"
+                      variant="success"
                       onClick={() => {
-                        showProductDetailsModal(product);
+                        updateProductData(product);
                       }}
                     >
-                      Show Full Details
+                      Edit
                     </Button>
-                  </td>
-                </tr>
-              ))
+                    <Button
+                      variant="danger"
+                      onClick={() => {
+                        setDeleteProductModal(true);
+                        setCurrentProduct(product);
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </ButtonGroup>
+                  <Button
+                    style={{ width: "100%" }}
+                    size="sm"
+                    onClick={() => {
+                      showProductDetailsModal(product);
+                    }}
+                  >
+                    Show Full Details
+                  </Button>
+                </td>
+              </tr>
+            ))
             : null}
         </tbody>
       </Table>
@@ -499,7 +512,7 @@ function Products(props) {
         />
         <Input
           lable="Product Price"
-          type={"text"}
+          type={"number"}
           value={productPriceUpdate}
           placeholder={"Product Price"}
           onChange={(e) => {
@@ -508,7 +521,7 @@ function Products(props) {
         />
         <Input
           lable="Product Quantity"
-          type={"text"}
+          type={"number"}
           value={productQtyUpdate}
           placeholder={"Product Quantity"}
           onChange={(e) => {
@@ -527,7 +540,7 @@ function Products(props) {
         />
         <Input
           lable="Product Offer"
-          type={"text"}
+          type={"number"}
           value={productOfferUpdate}
           placeholder={"Product Offer"}
           onChange={(e) => {
@@ -629,7 +642,7 @@ function Products(props) {
         />
         <Input
           lable="Product Price"
-          type={"text"}
+          type={"number"}
           value={productPrice}
           placeholder={"Product Price"}
           onChange={(e) => {
@@ -638,7 +651,7 @@ function Products(props) {
         />
         <Input
           lable="Product Quantity"
-          type={"text"}
+          type={"number"}
           value={productQty}
           placeholder={"Product Quantity"}
           onChange={(e) => {
@@ -657,7 +670,7 @@ function Products(props) {
         />
         <Input
           lable="Product Offer"
-          type={"text"}
+          type={"number"}
           value={productOffer}
           placeholder={"Product Offer"}
           onChange={(e) => {

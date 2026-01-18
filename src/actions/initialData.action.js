@@ -26,11 +26,13 @@ export const getInitialData = () => {
           type: orderConstants.GET_CUSTOMER_ORDER_SUCCESS,
           payload: { orders },
         });
+      }else{
+        toast.error("Something went wrong!");
       }
       console.log(res);
     } catch (error) {
       console.log(error?.response?.data);
-      toast.error("Something went wrong!");
+      toast.error(error?.response?.data.error || "Something went wrong!");
     }
 
   };

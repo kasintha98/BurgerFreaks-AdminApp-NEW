@@ -19,6 +19,7 @@ const getAllCategory = () => {
           payload: { categories: categories },
         });
       } else {
+        toast.error("Something went wrong!");
         dispatch({
           type: categoryConstants.GET_ALL_CATEGORIES_FAILURE,
           payload: {
@@ -28,7 +29,7 @@ const getAllCategory = () => {
       }
     } catch (error) {
       console.log(error?.response?.data);
-      toast.error("Something went wrong!");
+      toast.error(error?.response?.data.error || "Something went wrong!");
       dispatch({
         type: categoryConstants.GET_ALL_CATEGORIES_FAILURE,
         payload: {
@@ -44,10 +45,10 @@ const getAllCategory = () => {
 export const addCategory = (form) => {
   return async (dispatch) => {
     dispatch({ type: categoryConstants.ADD_NEW_CATEGORY_REQUEST });
-
     try {
       const res = await axios.post("/category/create", form);
       if (res.status === 201) {
+
         dispatch({
           type: categoryConstants.ADD_NEW_CATEGORY_SUCCESS,
           payload: { category: res.data.category },
@@ -63,28 +64,20 @@ export const addCategory = (form) => {
           progress: undefined,
         });
       } else {
+        toast.error("Something went wrong!");
         dispatch({
           type: categoryConstants.ADD_NEW_CATEGORY_FAILURE,
-          payload: res.data.error,
+          payload: res.data.error || "Something went wrong!",
         });
-
-        toast.error(res.data.error, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(res.data.error || "Something went wrong!");
       }
       console.log(res);
     } catch (error) {
       console.log(error.reponse);
-      toast.error("Something went wrong!");
+      toast.error(error?.response?.data.error || "Something went wrong!");
       dispatch({
         type: categoryConstants.ADD_NEW_CATEGORY_FAILURE,
-        payload: error?.response?.data.error,
+        payload: error?.response?.data.error || "Something went wrong!",
       });
     }
   };
@@ -114,21 +107,13 @@ export const updateCategory = (form) => {
         const { error } = res.data;
         dispatch({
           type: categoryConstants.UPDATE_CATEGORY_FAILURE,
-          payload: { error },
+          payload: { error: error || "Something went wrong!" },
         });
-        toast.error(res.data.error, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(res.data.error || "Something went wrong!");
       }
     } catch (error) {
       console.log(error?.response?.data);
-      toast.error("Something went wrong!");
+      toast.error(error?.response?.data.error || "Something went wrong!");
       dispatch({
         type: categoryConstants.UPDATE_CATEGORY_FAILURE,
         payload: { error: error?.response?.data.error },
@@ -164,22 +149,14 @@ export const deleteCategory = (id) => {
         const { error } = res.data;
         dispatch({
           type: categoryConstants.DELETE_CATEGORY_FAILURE,
-          payload: { error },
+          payload: { error: error || "Something went wrong!" },
         });
 
-        toast.error(res.data.error, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(res.data.error || "Something went wrong!");
       }
     } catch (error) {
       console.log(error?.response?.data);
-      toast.error("Something went wrong!");
+      toast.error(error?.response?.data?.error || "Something went wrong!");
       dispatch({
         type: categoryConstants.DELETE_CATEGORY_FAILURE,
         payload: { error: error?.response?.data.error },

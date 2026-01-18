@@ -24,20 +24,19 @@ export const signup = (user) => {
           },
         });
       } else {
-        if (res.status === 400) {
-          dispatch({
-            type: userConstants.USER_SIGNUP_FAILURE,
-            payload: { error: res.data.error },
-          });
-        }
+        dispatch({
+          type: userConstants.USER_SIGNUP_FAILURE,
+          payload: { error: res.data.error },
+        });
+        toast.error(res.data.error || "Something went wrong!");
       }
     } catch (error) {
       console.log(error?.response?.data);
-      toast.error("Something went wrong!");
+      toast.error(error?.response?.data.error || "Something went wrong!");
       dispatch({
-            type: userConstants.USER_SIGNUP_FAILURE,
-            payload: { error: error?.response?.data.error },
-          });
+        type: userConstants.USER_SIGNUP_FAILURE,
+        payload: { error: error?.response?.data.error },
+      });
     }
 
   };

@@ -6,7 +6,7 @@ const initState = {
   error: null,
 };
 
-export default (state = initState, action) => {
+const employeeReducer = (state = initState, action) => {
   switch (action.type) {
     case employeeConstants.GET_EMPLOYEE_SUCCESS:
       state = {
@@ -30,7 +30,12 @@ export default (state = initState, action) => {
         error: action?.payload?.error,
       };
       break;
+
+    default:
+      break;
   }
 
   return state;
 };
+
+export default employeeReducer;

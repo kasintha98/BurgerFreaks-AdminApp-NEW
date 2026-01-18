@@ -19,6 +19,7 @@ export const getInventory = () => {
           payload: { inventory: inventory },
         });
       } else {
+        toast.error("Something went wrong!");
         dispatch({
           type: inventoryConstants.GET_INVENTORY_FAILURE,
           payload: {
@@ -28,7 +29,7 @@ export const getInventory = () => {
       }
     } catch (error) {
       console.log(error?.response?.data);
-      toast.error("Something went wrong!");
+      toast.error(error?.response?.data.error || "Something went wrong!");
       dispatch({
         type: inventoryConstants.GET_INVENTORY_FAILURE,
         payload: {

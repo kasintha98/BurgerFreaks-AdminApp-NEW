@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Row,
@@ -8,7 +8,7 @@ import {
   ButtonGroup,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { addCategory, updateCategory, deleteCategory } from "../../actions";
+import { addCategory, updateCategory, deleteCategory, getAllCategory } from "../../actions";
 import Layout from "../../components/Layouts";
 import Input from "../../components/UI/Input";
 import NewModal from "../../components/UI/Modal";
@@ -39,6 +39,10 @@ function Category(props) {
   const dispatch = useDispatch();
 
   const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    dispatch(getAllCategory());
+  }, [])
 
   //adding a new category from user entered form data. Those formdata pass into the addCategory() function in actions
   const addNewCategory = () => {
@@ -86,12 +90,12 @@ function Category(props) {
     form.append("description", categoryDescription);
     form.append("categoryImages", categoryImage);
 
-    dispatch(addCategory(form));
-
-    setCategoryName("");
-    setCategoryDescription("");
-    setCategoryImage("");
-    handleClose();
+    dispatch(addCategory(form)).then(() => {
+      setCategoryName("");
+      setCategoryDescription("");
+      setCategoryImage("");
+      handleClose();
+    });
   };
 
   const handleClose = () => {
@@ -110,10 +114,10 @@ function Category(props) {
             <div style={{ maxWidth: "100px" }}>
               {category.categoryImages
                 ? category.categoryImages.map((picture) => (
-                    <div className="categoryImageContainer">
-                      <img src={generatePublicUrl(picture.img)} alt="" />
-                    </div>
-                  ))
+                  <div className="categoryImageContainer">
+                    <img src={generatePublicUrl(picture.img)} alt="" />
+                  </div>
+                ))
                 : window.location.reload()}
             </div>
           </td>
@@ -298,7 +302,12 @@ function Category(props) {
     form.append("categoryImages", categoryImageUpdate);
 
     //updating the category with new form data and then updating the category list(getting the updated category list)
-    dispatch(updateCategory(form));
+    dispatch(updateCategory(form)).then(() => {
+      setCategoryName("");
+      setCategoryDescription("");
+      setCategoryImage("");
+      setUpdateCategoryModal(false);
+    });
   };
 
   //showing update category modal popup

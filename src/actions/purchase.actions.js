@@ -19,6 +19,7 @@ export const getPurchase = () => {
           payload: { purchase: purchase },
         });
       } else {
+        toast.error("Something went wrong!");
         dispatch({
           type: purchaseConstants.GET_PURCHASE_FAILURE,
           payload: {
@@ -28,7 +29,7 @@ export const getPurchase = () => {
       }
     } catch (error) {
       console.log(error?.response?.data);
-      toast.error("Something went wrong!");
+      toast.error(error?.response?.data.error || "Something went wrong!");
       dispatch({
         type: purchaseConstants.GET_PURCHASE_FAILURE,
         payload: {
@@ -68,20 +69,12 @@ export const addPurchase = (form) => {
           payload: res.data.error,
         });
 
-        toast.error(res.data.error, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(res.data.error || "Something went wrong!");
       }
       console.log(res);
     } catch (error) {
       console.log(error?.response?.data);
-      toast.error("Something went wrong!");
+      toast.error(error?.response?.data.error || "Something went wrong!");
       dispatch({
         type: purchaseConstants.ADD_PURCHASE_FAILURE,
         payload: error?.response?.data.error,
@@ -117,18 +110,10 @@ export const deletePurchase = (id) => {
         const { error } = res.data;
         dispatch({
           type: purchaseConstants.DELETE_PURCHASE_FAILURE,
-          payload: { error },
+          payload: { error: error || "Something went wrong!" },
         });
 
-        toast.error(res.data.error, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(res.data.error || "Something went wrong!");
       }
     } catch (error) {
       console.log(error?.response?.data);

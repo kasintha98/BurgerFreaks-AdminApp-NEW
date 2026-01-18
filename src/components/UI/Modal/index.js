@@ -19,9 +19,9 @@ function NewModal(props) {
             onClick={() => {
               props.addNewItem();
 
-              if (!props.cat) {
+              /* if (!props.cat) {
                 props.handleClose();
-              }
+              } */
             }}
           >
             {props.saveBtnName ? props.saveBtnName : "Save"}

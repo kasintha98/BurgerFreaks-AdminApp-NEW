@@ -18,7 +18,7 @@ const buildNewCategories = (categories, category) => {
   ];
 };
 
-export default (state = initState, action) => {
+const categoryReducer = (state = initState, action) => {
   switch (action.type) {
     case categoryConstants.GET_ALL_CATEGORIES_SUCCESS:
       state = {
@@ -46,7 +46,7 @@ export default (state = initState, action) => {
       break;
     case categoryConstants.ADD_NEW_CATEGORY_FAILURE:
       state = {
-        ...initState,
+        ...state,
         loading: false,
         error: action?.payload?.error,
       };
@@ -69,6 +69,10 @@ export default (state = initState, action) => {
     case categoryConstants.DELETE_CATEGORY_FAILURE:
       state = { ...state, error: action?.payload?.error, loading: false };
       break;
+    default:
+      return state;
   }
   return state;
 };
+
+export default categoryReducer;

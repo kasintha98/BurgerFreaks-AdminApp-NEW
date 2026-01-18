@@ -20,12 +20,12 @@ const initState = {
   authenticating: false,
   loading: false,
   error: null,
-  errormsg: null,
+  error: null,
   message: "",
 };
 
 //check what is the request and returning suitable state for the request
-export default (state = initState, action) => {
+const authReducer = (state = initState, action) => {
   console.log(action);
 
   switch (action.type) {
@@ -47,7 +47,7 @@ export default (state = initState, action) => {
     case authConstants.LOGIN_FAILURE:
       state = {
         ...state,
-        errormsg: action.payload.errormsg,
+        error: action.payload.error,
         authenticate: false,
         authenticating: false,
       };
@@ -71,7 +71,11 @@ export default (state = initState, action) => {
         loading: false,
       };
       break;
+    default:
+      break;
   }
 
   return state;
 };
+
+export default authReducer;

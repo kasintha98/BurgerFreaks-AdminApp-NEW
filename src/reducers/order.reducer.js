@@ -4,7 +4,7 @@ const initState = {
   orders: [],
 };
 
-export default (state = initState, action) => {
+const orderReducer = (state = initState, action) => {
   switch (action.type) {
     case orderConstants.GET_CUSTOMER_ORDER_SUCCESS:
       state = {
@@ -12,6 +12,10 @@ export default (state = initState, action) => {
         orders: action.payload.orders,
       };
       break;
+    default:
+      break;
   }
   return state;
 };
+
+export default orderReducer;

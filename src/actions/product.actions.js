@@ -19,6 +19,7 @@ const getAllProducts = () => {
           payload: { products: products },
         });
       } else {
+          toast.error("Something went wrong!");
         dispatch({
           type: productConstants.GET_ALL_PRODUCTS_FAILURE,
           payload: {
@@ -28,7 +29,7 @@ const getAllProducts = () => {
       }
     } catch (error) {
       console.log(error?.response?.data);
-      toast.error("Something went wrong!");
+      toast.error(error?.response?.data.error || "Something went wrong!");
       dispatch({
         type: productConstants.GET_ALL_PRODUCTS_FAILURE,
         payload: {
@@ -64,6 +65,7 @@ export const addProduct = (form) => {
           progress: undefined,
         });
       } else {
+        toast.error(res.data.error || "Something went wrong!");
         dispatch({
           type: productConstants.ADD_NEW_PRODUCT_FAILURE,
           payload: res.data.error,
@@ -82,7 +84,7 @@ export const addProduct = (form) => {
       console.log(res);
     } catch (error) {
       console.log(error?.response?.data);
-      toast.error("Something went wrong!");
+      toast.error(error?.response?.data.error || "Something went wrong!");
       dispatch({
         type: productConstants.ADD_NEW_PRODUCT_FAILURE,
         payload: error?.response?.data.error,
@@ -115,22 +117,14 @@ export const updateProduct = (form) => {
         const { error } = res.data;
         dispatch({
           type: productConstants.UPDATE_PRODUCT_FAILURE,
-          payload: { error },
+          payload: { error: error || "Something went wrong!" },
         });
 
-        toast.error(res.data.error, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(res.data.error || "Something went wrong!");
       }
     } catch (error) {
       console.log(error?.response?.data);
-      toast.error("Something went wrong!");
+      toast.error(error?.response?.data.error || "Something went wrong!");
       dispatch({
         type: productConstants.UPDATE_PRODUCT_FAILURE,
         payload: { error: error?.response?.data.error },
@@ -167,22 +161,14 @@ export const deleteProduct = (id) => {
         const { error } = res.data;
         dispatch({
           type: productConstants.DELETE_PRODUCT_FAILURE,
-          payload: { error },
+          payload: { error: error || "Something went wrong!" },
         });
 
-        toast.error(res.data.error, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(res.data.error || "Something went wrong!");
       }
     } catch (error) {
       console.log(error?.response?.data);
-      toast.error("Something went wrong!");
+      toast.error(error?.response?.data.error || "Something went wrong!");
       dispatch({
         type: productConstants.DELETE_PRODUCT_FAILURE,
         payload: { error: error?.response?.data.error },

@@ -37,30 +37,19 @@ export const login = (user) => {
           draggable: true,
           progress: undefined,
         });
-      }
-      //if backend error
-      if (res.status === 202) {
+      } else {
+        toast.error("Something went wrong!");
         dispatch({
           type: authConstants.LOGIN_FAILURE,
-          payload: { errormsg: res.data.errormsg },
-        });
-        //show error notification
-        toast.error(res.data.errormsg, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
+          payload: { error: "Something went wrong!" },
         });
       }
     } catch (error) {
       console.log(error?.response?.data);
-      toast.error("Something went wrong!");
+      toast.error(error?.response?.data?.error || "Something went wrong!");
       dispatch({
         type: authConstants.LOGIN_FAILURE,
-        payload: { errormsg: error?.response?.data?.error },
+        payload: { error: error?.response?.data?.error || "Something went wrong!" },
       });
     }
 
@@ -96,26 +85,18 @@ export const signup = (user) => {
         //if backend error
         dispatch({
           type: userConstants.USER_SIGNUP_FAILURE,
-          payload: { errormsg: res.data.errormsg },
+          payload: { error: res.data.error || "Something went wrong!" },
         });
 
         //show error notification
-        toast.error(res.data.errormsg, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.error(res.data.error);
       }
     } catch (error) {
       console.log(error?.response?.data);
-      toast.error("Something went wrong!");
+      toast.error(error?.response?.data?.error || "Something went wrong!");
       dispatch({
         type: userConstants.USER_SIGNUP_FAILURE,
-        payload: { errormsg: error?.response?.data.error },
+        payload: { error: error?.response?.data.error || "Something went wrong!" },
       });
     }
 
@@ -168,7 +149,7 @@ export const signout = () => {
       }
     } catch (error) {
       console.log(error?.response?.data);
-      toast.error("Something went wrong!");
+      toast.error(error?.response?.data.error || "Something went wrong!");
       dispatch({
         type: authConstants.LOGOUT_FAILURE,
         payload: { error: error?.response?.data.error },

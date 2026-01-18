@@ -18,11 +18,12 @@ export const getCustomerOrders = () => {
         const { error } = res.data;
         dispatch({
           type: orderConstants.GET_CUSTOMER_ORDER_FAILURE,
-          payload: { error },
+          payload: { error: error || "Something went wrong!" },
         });
+        toast.error(error || "Something went wrong!");
       }
     } catch (error) {
-      toast.error("Something went wrong!");
+      toast.error(error?.response?.data.error || "Something went wrong!");
       console.log(error.response);
       dispatch({
         type: orderConstants.GET_CUSTOMER_ORDER_FAILURE,
@@ -58,11 +59,12 @@ export const updateOrder = (payload) => {
         const { error } = res.data;
         dispatch({
           type: orderConstants.UPDATE_CUSTOMER_ORDER_FAILURE,
-          payload: { error },
+          payload: { error: error || "Something went wrong!" },
         });
+        toast.error(error || "Something went wrong!");
       }
     } catch (error) {
-      toast.error("Something went wrong!");
+      toast.error(error?.response?.data.error || "Something went wrong!");
       console.log(error.response);
       dispatch({
         type: orderConstants.UPDATE_CUSTOMER_ORDER_FAILURE,

@@ -4,10 +4,10 @@ const initState = {
   error: null,
   message: "",
   loading: false,
-  errormsg: null,
+  error: null,
 };
 
-export default (state = initState, action) => {
+const userReducer = (state = initState, action) => {
   switch (action.type) {
     case userConstants.USER_SIGNUP_REQUEST:
       state = {
@@ -27,10 +27,14 @@ export default (state = initState, action) => {
         ...state,
         loading: false,
         error: action?.payload?.error,
-        errormsg: action.payload.errormsg,
+        error: action.payload.error,
       };
       break;
+    default:
+      return state;
   }
 
   return state;
 };
+
+export default userReducer;
