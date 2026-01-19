@@ -9,9 +9,30 @@ function Home(props) {
   const auth = useSelector((state) => state.auth);
   const order = useSelector((state) => state.order);
 
-  //get new orders on load
+  //get new orders on load and refresh every 5 seconds
   useEffect(() => {
-    dispatch(getCustomerOrders());
+    // Initial call
+    dispatch(getCustomerOrders())
+      .then(() => {
+        console.log("Orders loaded successfully");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    // Set up interval to refresh every 5 seconds
+    const interval = setInterval(() => {
+      dispatch(getCustomerOrders())
+        .then(() => {
+          console.log("Orders refreshed successfully");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }, 5000);
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(interval);
   }, []);
 
   let orderNumbers = 0;
@@ -30,7 +51,7 @@ function Home(props) {
             ) : null}{" "}
           </h2>
           {order.orders.map((orderItem, index) => (
-            <div>
+            <div key={index}>
               {(() => {
                 for (var i = 0; i < orderItem.orderStatus.length; i++) {
                   if (
@@ -52,7 +73,7 @@ function Home(props) {
           >
             <br></br>
             <h2> Not Completed Orders In Queue</h2>
-            <h1 style={{ padding: "50px" }}>
+            <h1 className="orderNumberIndicator">
               {orderNumbers ? orderNumbers : 0}
             </h1>
           </div>

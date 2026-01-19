@@ -37,20 +37,22 @@ export const login = (user) => {
           draggable: true,
           progress: undefined,
         });
+        return res.data;
       } else {
         toast.error("Something went wrong!");
         dispatch({
           type: authConstants.LOGIN_FAILURE,
           payload: { error: "Something went wrong!" },
         });
+        throw new Error("Something went wrong!");
       }
     } catch (error) {
-      console.log(error?.response?.data);
       toast.error(error?.response?.data?.error || "Something went wrong!");
       dispatch({
         type: authConstants.LOGIN_FAILURE,
         payload: { error: error?.response?.data?.error || "Something went wrong!" },
       });
+      throw error;
     }
 
   };
@@ -81,6 +83,7 @@ export const signup = (user) => {
           draggable: true,
           progress: undefined,
         });
+        return res.data;
       } else {
         //if backend error
         dispatch({
@@ -90,14 +93,15 @@ export const signup = (user) => {
 
         //show error notification
         toast.error(res.data.error);
+        throw new Error(res.data.error || "Something went wrong!");
       }
     } catch (error) {
-      console.log(error?.response?.data);
       toast.error(error?.response?.data?.error || "Something went wrong!");
       dispatch({
         type: userConstants.USER_SIGNUP_FAILURE,
         payload: { error: error?.response?.data.error || "Something went wrong!" },
       });
+      throw new Error(error?.response?.data?.error || "Something went wrong!");
     }
 
   };
@@ -117,12 +121,14 @@ export const isUserLoggedIn = () => {
           user,
         },
       });
+      return { token, user };
     } else {
       //if backend error
       dispatch({
         type: authConstants.LOGIN_FAILURE,
         payload: { error: "Failed to login!" },
       });
+      throw new Error("Failed to login!");
     }
   };
 };
@@ -141,19 +147,21 @@ export const signout = () => {
         dispatch({
           type: authConstants.LOGOUT_SUCCESS,
         });
+        return res.data;
       } else {
         dispatch({
           type: authConstants.LOGOUT_FAILURE,
           payload: { error: res.data.error },
         });
+        throw new Error(res.data.error || "Something went wrong!");
       }
     } catch (error) {
-      console.log(error?.response?.data);
       toast.error(error?.response?.data.error || "Something went wrong!");
       dispatch({
         type: authConstants.LOGOUT_FAILURE,
         payload: { error: error?.response?.data.error },
       });
+      throw error;
     }
 
   };

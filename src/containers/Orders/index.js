@@ -20,7 +20,13 @@ function Orders(props) {
 
   //get new orders on load
   useEffect(() => {
-    dispatch(getCustomerOrders());
+    dispatch(getCustomerOrders())
+      .then(() => {
+        console.log("Orders loaded successfully");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   //calling the action to update order
@@ -29,7 +35,13 @@ function Orders(props) {
       orderId,
       type,
     };
-    dispatch(updateOrder(payload));
+    dispatch(updateOrder(payload))
+      .then(() => {
+        console.log("Order updated successfully");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const search = (e) => {

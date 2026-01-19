@@ -18,6 +18,7 @@ export const getInventory = () => {
           type: inventoryConstants.GET_INVENTORY_SUCCESS,
           payload: { inventory: inventory },
         });
+        return res.data;
       } else {
         toast.error("Something went wrong!");
         dispatch({
@@ -26,9 +27,10 @@ export const getInventory = () => {
             error: res.data.error,
           },
         });
+        throw new Error(res.data.error || "Something went wrong!");
       }
     } catch (error) {
-      console.log(error?.response?.data);
+      
       toast.error(error?.response?.data.error || "Something went wrong!");
       dispatch({
         type: inventoryConstants.GET_INVENTORY_FAILURE,
@@ -36,6 +38,7 @@ export const getInventory = () => {
           error: error?.response?.data.error,
         },
       });
+      throw error;
     }
 
   };
@@ -53,6 +56,7 @@ export const addInventory = (form) => {
           type: inventoryConstants.ADD_INVENTORY_SUCCESS,
           payload: { inventory: res.data.inventory },
         });
+        dispatch(getInventory());
         toast.success(res.data.msg, {
           position: "top-right",
           autoClose: 5000,
@@ -62,6 +66,7 @@ export const addInventory = (form) => {
           draggable: true,
           progress: undefined,
         });
+        return res.data;
       } else {
         dispatch({
           type: inventoryConstants.ADD_INVENTORY_FAILURE,
@@ -76,8 +81,8 @@ export const addInventory = (form) => {
           draggable: true,
           progress: undefined,
         });
+        throw new Error(res.data.error || "Something went wrong!");
       }
-      console.log(res);
     } catch (error) {
       console.log(error.reponse);
       toast.error("Something went wrong!");
@@ -85,6 +90,7 @@ export const addInventory = (form) => {
         type: inventoryConstants.ADD_INVENTORY_FAILURE,
         payload: error?.response?.data.error,
       });
+      throw new Error(error?.response?.data.error || "Something went wrong!");
     }
   };
 };
@@ -111,6 +117,7 @@ export const deleteInventory = (id) => {
           draggable: true,
           progress: undefined,
         });
+        return res.data;
       } else {
         const { error } = res.data;
         dispatch({
@@ -127,14 +134,15 @@ export const deleteInventory = (id) => {
           draggable: true,
           progress: undefined,
         });
+        throw new Error(error || "Something went wrong!");
       }
     } catch (error) {
-      console.log(error?.response?.data);
       toast.error("Something went wrong!");
       dispatch({
         type: inventoryConstants.DELETE_INVENTORY_FAILURE,
         payload: { error: error?.response?.data.error },
       });
+      throw error;
     }
 
   };

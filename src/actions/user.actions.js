@@ -31,7 +31,6 @@ export const signup = (user) => {
         toast.error(res.data.error || "Something went wrong!");
       }
     } catch (error) {
-      console.log(error?.response?.data);
       toast.error(error?.response?.data.error || "Something went wrong!");
       dispatch({
         type: userConstants.USER_SIGNUP_FAILURE,

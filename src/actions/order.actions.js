@@ -14,6 +14,7 @@ export const getCustomerOrders = () => {
           type: orderConstants.GET_CUSTOMER_ORDER_SUCCESS,
           payload: { orders },
         });
+        return res.data;
       } else {
         const { error } = res.data;
         dispatch({
@@ -21,14 +22,15 @@ export const getCustomerOrders = () => {
           payload: { error: error || "Something went wrong!" },
         });
         toast.error(error || "Something went wrong!");
+        throw new Error(error || "Something went wrong!");
       }
     } catch (error) {
       toast.error(error?.response?.data.error || "Something went wrong!");
-      console.log(error.response);
       dispatch({
         type: orderConstants.GET_CUSTOMER_ORDER_FAILURE,
         payload: { error: error?.response?.data.error },
       });
+      throw new Error(error?.response?.data.error || "Something went wrong!");
     }
   };
 };
@@ -55,6 +57,7 @@ export const updateOrder = (payload) => {
           draggable: true,
           progress: undefined,
         });
+        return res.data;
       } else {
         const { error } = res.data;
         dispatch({
@@ -62,14 +65,15 @@ export const updateOrder = (payload) => {
           payload: { error: error || "Something went wrong!" },
         });
         toast.error(error || "Something went wrong!");
+        throw new Error(error || "Something went wrong!");
       }
     } catch (error) {
       toast.error(error?.response?.data.error || "Something went wrong!");
-      console.log(error.response);
       dispatch({
         type: orderConstants.UPDATE_CUSTOMER_ORDER_FAILURE,
         payload: { error: error?.response?.data.error },
       });
+      throw error;
     }
   };
 };

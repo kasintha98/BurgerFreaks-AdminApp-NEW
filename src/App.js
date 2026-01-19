@@ -23,7 +23,7 @@ function App() {
   //checking user logging and getting initial data
   useEffect(() => {
     if (!auth.authenticate) {
-      dispatch(isUserLoggedIn());
+      dispatch(isUserLoggedIn()).then(() => {}).catch((error) => {console.log(error);});
     }
     dispatch(getInitialData());
   }, []);

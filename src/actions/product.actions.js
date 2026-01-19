@@ -18,6 +18,7 @@ const getAllProducts = () => {
           type: productConstants.GET_ALL_PRODUCTS_SUCCESS,
           payload: { products: products },
         });
+        return res.data;
       } else {
           toast.error("Something went wrong!");
         dispatch({
@@ -26,9 +27,9 @@ const getAllProducts = () => {
             error: res.data.error,
           },
         });
+        throw new Error(res.data.error || "Something went wrong!");
       }
     } catch (error) {
-      console.log(error?.response?.data);
       toast.error(error?.response?.data.error || "Something went wrong!");
       dispatch({
         type: productConstants.GET_ALL_PRODUCTS_FAILURE,
@@ -36,6 +37,7 @@ const getAllProducts = () => {
           error: error?.response?.data.error,
         },
       });
+       throw new Error(error?.response?.data.error || "Something went wrong!");
     }
 
   };
@@ -64,6 +66,7 @@ export const addProduct = (form) => {
           draggable: true,
           progress: undefined,
         });
+        return res.data;
       } else {
         toast.error(res.data.error || "Something went wrong!");
         dispatch({
@@ -80,15 +83,15 @@ export const addProduct = (form) => {
           draggable: true,
           progress: undefined,
         });
+        throw new Error(res.data.error || "Something went wrong!");
       }
-      console.log(res);
     } catch (error) {
-      console.log(error?.response?.data);
       toast.error(error?.response?.data.error || "Something went wrong!");
       dispatch({
         type: productConstants.ADD_NEW_PRODUCT_FAILURE,
         payload: error?.response?.data.error,
       });
+      throw new Error(error?.response?.data.error || "Something went wrong!");
     }
   };
 };
@@ -113,6 +116,7 @@ export const updateProduct = (form) => {
           draggable: true,
           progress: undefined,
         });
+        return res.data;
       } else {
         const { error } = res.data;
         dispatch({
@@ -121,14 +125,15 @@ export const updateProduct = (form) => {
         });
 
         toast.error(res.data.error || "Something went wrong!");
+        throw new Error(error || "Something went wrong!");
       }
     } catch (error) {
-      console.log(error?.response?.data);
       toast.error(error?.response?.data.error || "Something went wrong!");
       dispatch({
         type: productConstants.UPDATE_PRODUCT_FAILURE,
         payload: { error: error?.response?.data.error },
       });
+      throw error;
     }
 
   };
@@ -157,6 +162,7 @@ export const deleteProduct = (id) => {
           draggable: true,
           progress: undefined,
         });
+        return res.data;
       } else {
         const { error } = res.data;
         dispatch({
@@ -165,14 +171,15 @@ export const deleteProduct = (id) => {
         });
 
         toast.error(res.data.error || "Something went wrong!");
+        throw new Error(error || "Something went wrong!");
       }
     } catch (error) {
-      console.log(error?.response?.data);
       toast.error(error?.response?.data.error || "Something went wrong!");
       dispatch({
         type: productConstants.DELETE_PRODUCT_FAILURE,
         payload: { error: error?.response?.data.error },
       });
+      throw error;
     }
 
   };

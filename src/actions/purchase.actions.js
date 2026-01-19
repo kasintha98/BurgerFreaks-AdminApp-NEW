@@ -18,6 +18,7 @@ export const getPurchase = () => {
           type: purchaseConstants.GET_PURCHASE_SUCCESS,
           payload: { purchase: purchase },
         });
+        return res.data;
       } else {
         toast.error("Something went wrong!");
         dispatch({
@@ -26,9 +27,9 @@ export const getPurchase = () => {
             error: res.data.error,
           },
         });
+        throw new Error(res.data.error || "Something went wrong!");
       }
     } catch (error) {
-      console.log(error?.response?.data);
       toast.error(error?.response?.data.error || "Something went wrong!");
       dispatch({
         type: purchaseConstants.GET_PURCHASE_FAILURE,
@@ -36,6 +37,7 @@ export const getPurchase = () => {
           error: error?.response?.data.error,
         },
       });
+      throw error;
     }
 
   };
@@ -53,6 +55,7 @@ export const addPurchase = (form) => {
           type: purchaseConstants.ADD_PURCHASE_SUCCESS,
           payload: { purchase: res.data.purchase },
         });
+        dispatch(getPurchase());
 
         toast.success(res.data.msg, {
           position: "top-right",
@@ -63,22 +66,22 @@ export const addPurchase = (form) => {
           draggable: true,
           progress: undefined,
         });
+        return res.data;
       } else {
         dispatch({
           type: purchaseConstants.ADD_PURCHASE_FAILURE,
           payload: res.data.error,
         });
-
         toast.error(res.data.error || "Something went wrong!");
+        throw new Error(res.data.error || "Something went wrong!");
       }
-      console.log(res);
     } catch (error) {
-      console.log(error?.response?.data);
       toast.error(error?.response?.data.error || "Something went wrong!");
       dispatch({
         type: purchaseConstants.ADD_PURCHASE_FAILURE,
         payload: error?.response?.data.error,
       });
+      throw new Error(error?.response?.data.error || "Something went wrong!");
     }
   };
 };
@@ -106,22 +109,23 @@ export const deletePurchase = (id) => {
           draggable: true,
           progress: undefined,
         });
+        return res.data;
       } else {
         const { error } = res.data;
         dispatch({
           type: purchaseConstants.DELETE_PURCHASE_FAILURE,
           payload: { error: error || "Something went wrong!" },
         });
-
         toast.error(res.data.error || "Something went wrong!");
+        throw new Error(error || "Something went wrong!");
       }
     } catch (error) {
-      console.log(error?.response?.data);
       toast.error("Something went wrong!");
       dispatch({
         type: purchaseConstants.DELETE_PURCHASE_FAILURE,
         payload: { error: error?.response?.data.error },
       });
+      throw error;
     }
 
   };

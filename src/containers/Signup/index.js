@@ -105,7 +105,13 @@ function Signup(props) {
       password,
     };
 
-    dispatch(signup(user));
+    dispatch(signup(user))
+      .then(() => {
+        console.log("Signup successful");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     //props.history.push("/signin");
   };
 

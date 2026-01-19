@@ -31,7 +31,6 @@ export const getInitialData = () => {
       }
       console.log(res);
     } catch (error) {
-      console.log(error?.response?.data);
       toast.error(error?.response?.data.error || "Something went wrong!");
     }
 

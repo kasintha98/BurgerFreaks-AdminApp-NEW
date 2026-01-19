@@ -1,0 +1,7 @@
+.orderNumberIndicator {
+    padding: 25px 50px;
+    background-color: lightcoral;
+    width: fit-content;
+    text-align: center;
+    margin: 20px auto;
+}

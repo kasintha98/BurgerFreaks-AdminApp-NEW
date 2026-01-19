@@ -16,7 +16,13 @@ export default function Employee(props) {
 
   //getting all employees when loading the page
   useEffect(() => {
-    dispatch(getEmployees());
+    dispatch(getEmployees())
+      .then(() => {
+        console.log("Employees loaded successfully");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   const selectOptionsGender = {

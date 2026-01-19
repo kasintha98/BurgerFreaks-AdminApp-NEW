@@ -18,6 +18,7 @@ export const getEmployees = () => {
           type: employeeConstants.GET_EMPLOYEE_SUCCESS,
           payload: { employees: employees },
         });
+        return res.data;
       } else {
         dispatch({
           type: employeeConstants.GET_EMPLOYEE_FAILURE,
@@ -25,16 +26,17 @@ export const getEmployees = () => {
             error: res.data.error,
           },
         });
+        throw new Error(res.data.error || "Something went wrong!");
       }
     } catch (error) {
-      console.log(error?.response?.data);
-      toast.error(error?.response?.data.error ||"Something went wrong!");
+      toast.error(error?.response?.data.error || "Something went wrong!");
       dispatch({
         type: employeeConstants.GET_EMPLOYEE_FAILURE,
         payload: {
           error: error?.response?.data.error,
         },
       });
+      throw new Error(error?.response?.data.error || "Something went wrong!");
     }
 
   };

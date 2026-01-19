@@ -47,16 +47,7 @@ function Products(props) {
 
   const dispatch = useDispatch();
 
-  /*  useEffect(() => {
-    dispatch(getAllCategory());
-  }, []); */
-
   const [show, setShow] = useState(false);
-
-  //product is loading display loading spinner
-  if (product.loading) {
-    return <div className="spinner-border text-primary" role="status"></div>;
-  }
 
   const addNewProduct = () => {
     const form = new FormData();
@@ -207,7 +198,6 @@ function Products(props) {
       })
       .catch((err) => {
         console.log(err);
-        console.error(err);
       });
   };
 
@@ -390,9 +380,10 @@ function Products(props) {
       setProductImage([]);
       setUpdateProductModal(false);
     })
+    .catch((err) => {
+      console.log(err);
+    })
   };
-
-  console.log(productImage);
 
   const createCategoryList = (categories, options = []) => {
     for (let category of categories) {
@@ -422,8 +413,8 @@ function Products(props) {
                 <td>
                   <div style={{ maxWidth: "100px" }}>
                     <Carousel fade>
-                      {product.productImages.map((picture) => (
-                        <Carousel.Item>
+                      {product.productImages.map((picture, idx) => (
+                        <Carousel.Item key={idx}>
                           <div className="productImageContainer">
                             <img
                               src={generatePublicUrl(picture.img)}
@@ -602,7 +593,15 @@ function Products(props) {
   //fuction to delete product. dispatching the deleteproduct() from actions
   const deleteProductData = (pro) => {
     //dispatching the action to delete selected Product
-    dispatch(deleteProduct(pro._id));
+    dispatch(deleteProduct(pro._id))
+      .then(() => {
+        console.log("Product deleted successfully");
+        setDeleteProductModal(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setDeleteProductModal(false);
+      });
   };
 
   //popup modal to delete product
@@ -790,7 +789,7 @@ function Products(props) {
   return (
     <Layout sidebar>
       <ToastContainer />
-      <Container>
+      {product.loading ? <div className="spinner-border text-primary" role="status"></div> : <Container>
         <Row>
           <Col md={12}>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -808,7 +807,7 @@ function Products(props) {
         <Row>
           <Col md={12}>{renderProducts()}</Col>
         </Row>
-      </Container>
+      </Container>}
       {renderAddProductModal()}
       {renderProductDetailsModal()}
       {renderDeleteProductModal()}

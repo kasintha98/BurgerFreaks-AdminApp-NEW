@@ -26,8 +26,13 @@ function Signin(props) {
 
     const user = { email, password };
 
-    console.log(user);
-    dispatch(login(user));
+    dispatch(login(user))
+      .then(() => {
+        console.log("Login successful");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   if (auth.authenticate === true) {

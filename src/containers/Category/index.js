@@ -41,7 +41,13 @@ function Category(props) {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    dispatch(getAllCategory());
+    dispatch(getAllCategory())
+      .then(() => {
+        console.log("Categories loaded successfully");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [])
 
   //adding a new category from user entered form data. Those formdata pass into the addCategory() function in actions
@@ -95,7 +101,10 @@ function Category(props) {
       setCategoryDescription("");
       setCategoryImage("");
       handleClose();
-    });
+    })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleClose = () => {
@@ -113,8 +122,8 @@ function Category(props) {
           <td>
             <div style={{ maxWidth: "100px" }}>
               {category.categoryImages
-                ? category.categoryImages.map((picture) => (
-                  <div className="categoryImageContainer">
+                ? category.categoryImages.map((picture, idx) => (
+                  <div key={idx} className="categoryImageContainer">
                     <img src={generatePublicUrl(picture.img)} alt="" />
                   </div>
                 ))
@@ -187,7 +196,13 @@ function Category(props) {
   //fuction to delete category. dispatching the deleteCategory() from actions
   const deleteCategoryData = (cat) => {
     //dispatching the action to delete selected category
-    dispatch(deleteCategory(cat._id));
+    dispatch(deleteCategory(cat._id))
+      .then(() => {
+        setDeleteCategoryModal(false);
+      })
+      .catch((err) => {
+        setDeleteCategoryModal(false);
+      });
   };
 
   //popup modal to delete category
@@ -307,7 +322,10 @@ function Category(props) {
       setCategoryDescription("");
       setCategoryImage("");
       setUpdateCategoryModal(false);
-    });
+    })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   //showing update category modal popup

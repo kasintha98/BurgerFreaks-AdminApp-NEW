@@ -23,7 +23,13 @@ export default function Purchases(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getPurchase());
+    dispatch(getPurchase())
+      .then(() => {
+        console.log("Purchases loaded successfully");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   const handleClose = () => {
@@ -114,17 +120,29 @@ export default function Purchases(props) {
       return;
     }
 
-    dispatch(addPurchase(purchaseObj));
-
-    setTitle("");
-    setDescription("");
-    setQty(0);
-    setUnitPrice(0);
-    handleClose();
+    dispatch(addPurchase(purchaseObj))
+      .then(() => {
+        setTitle("");
+        setDescription("");
+        setQty(0);
+        setUnitPrice(0);
+        handleClose();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const deletePurchaseData = (inv) => {
-    dispatch(deletePurchase(inv._id));
+    dispatch(deletePurchase(inv._id))
+      .then(() => {
+        console.log("Purchase deleted successfully");
+        setDeletePurchaseModal(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setDeletePurchaseModal(false);
+      });
   };
 
   //popup modal to delete purchase
@@ -149,7 +167,7 @@ export default function Purchases(props) {
       <tbody>
         {pur ? (
           pur.map((item) => (
-            <tr>
+            <tr key={item._id}>
               <td>{item.title}</td>
               <td>{item.qty}</td>
               <td>
@@ -165,7 +183,7 @@ export default function Purchases(props) {
               </td>
               <td>{item.description}</td>
               <td>
-                <Button variant="success">Edit</Button>
+                <Button variant="success" onClick={()=>{console.log("Function not implemented yet!");}}>Edit</Button>
                 &nbsp;
                 <Button
                   variant="danger"
@@ -209,7 +227,7 @@ export default function Purchases(props) {
         />
         <Input
           lable="Purchase Quantity"
-          type={"text"}
+          type={"number"}
           value={qty}
           placeholder={"Purchase Quantity"}
           onChange={(e) => {
@@ -218,7 +236,7 @@ export default function Purchases(props) {
         />
         <Input
           lable="Unit Price"
-          type={"text"}
+          type={"number"}
           value={unitPrice}
           placeholder={"Unit Price"}
           onChange={(e) => {

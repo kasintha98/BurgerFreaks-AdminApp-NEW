@@ -22,7 +22,13 @@ export default function Inventory(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getInventory());
+    dispatch(getInventory())
+      .then(() => {
+        console.log("Inventory loaded successfully");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   const handleClose = () => {
@@ -87,16 +93,28 @@ export default function Inventory(props) {
       return;
     }
 
-    dispatch(addInventory(inventoryObj));
-
-    setName("");
-    setDescription("");
-    setQty(0);
-    handleClose();
+    dispatch(addInventory(inventoryObj))
+      .then(() => {
+        setName("");
+        setDescription("");
+        setQty(0);
+        handleClose();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const deleteInventoryData = (inv) => {
-    dispatch(deleteInventory(inv._id));
+    dispatch(deleteInventory(inv._id))
+      .then(() => {
+        console.log("Inventory item deleted successfully");
+        setDeleteInventoryModal(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setDeleteInventoryModal(false);
+      });
   };
 
   //popup modal to delete inventory
@@ -120,12 +138,12 @@ export default function Inventory(props) {
     return (
       <tbody>
         {inv.map((item) => (
-          <tr>
+          <tr key={item._id}>
             <td>{item.name}</td>
             <td>{item.qty}</td>
             <td>{item.description}</td>
             <td>
-              <Button variant="success">Edit</Button>
+              <Button variant="success" onClick={()=>{console.log("Function not implemented!");}}>Edit</Button>
               &nbsp;
               <Button
                 variant="danger"
@@ -148,10 +166,9 @@ export default function Inventory(props) {
       <tbody>
         {pur ? (
           pur.map((item) => (
-            <tr>
+            <tr key={item._id}>
               <td>{item.title}</td>
               <td>{item.qty}</td>
-
               <td>{item.description}</td>
               <td>
                 <Button variant="success">Edit</Button>
@@ -190,7 +207,7 @@ export default function Inventory(props) {
         />
         <Input
           lable="Item Quantity"
-          type={"text"}
+          type={"number"}
           value={qty}
           placeholder={"Item Quantity"}
           onChange={(e) => {

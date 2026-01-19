@@ -18,6 +18,7 @@ const getAllCategory = () => {
           type: categoryConstants.GET_ALL_CATEGORIES_SUCCESS,
           payload: { categories: categories },
         });
+        return res.data;
       } else {
         toast.error("Something went wrong!");
         dispatch({
@@ -26,9 +27,9 @@ const getAllCategory = () => {
             error: res.data.error,
           },
         });
+        throw new Error(res.data.error || "Something went wrong!");
       }
     } catch (error) {
-      console.log(error?.response?.data);
       toast.error(error?.response?.data.error || "Something went wrong!");
       dispatch({
         type: categoryConstants.GET_ALL_CATEGORIES_FAILURE,
@@ -36,6 +37,7 @@ const getAllCategory = () => {
           error: error?.response?.data.error,
         },
       });
+      throw new Error(error?.response?.data.error || "Something went wrong!");
     }
 
   };
@@ -53,6 +55,7 @@ export const addCategory = (form) => {
           type: categoryConstants.ADD_NEW_CATEGORY_SUCCESS,
           payload: { category: res.data.category },
         });
+        dispatch(getAllCategory());
 
         toast.success(res.data.msg, {
           position: "top-right",
@@ -63,15 +66,15 @@ export const addCategory = (form) => {
           draggable: true,
           progress: undefined,
         });
+        return res.data;
       } else {
-        toast.error("Something went wrong!");
         dispatch({
           type: categoryConstants.ADD_NEW_CATEGORY_FAILURE,
           payload: res.data.error || "Something went wrong!",
         });
         toast.error(res.data.error || "Something went wrong!");
+        throw new Error(res.data.error || "Something went wrong!");
       }
-      console.log(res);
     } catch (error) {
       console.log(error.reponse);
       toast.error(error?.response?.data.error || "Something went wrong!");
@@ -79,6 +82,7 @@ export const addCategory = (form) => {
         type: categoryConstants.ADD_NEW_CATEGORY_FAILURE,
         payload: error?.response?.data.error || "Something went wrong!",
       });
+      throw new Error(error?.response?.data.error || "Something went wrong!");
     }
   };
 };
@@ -103,6 +107,7 @@ export const updateCategory = (form) => {
           draggable: true,
           progress: undefined,
         });
+        return res.data;
       } else {
         const { error } = res.data;
         dispatch({
@@ -110,14 +115,15 @@ export const updateCategory = (form) => {
           payload: { error: error || "Something went wrong!" },
         });
         toast.error(res.data.error || "Something went wrong!");
+        throw new Error(error || "Something went wrong!");
       }
     } catch (error) {
-      console.log(error?.response?.data);
       toast.error(error?.response?.data.error || "Something went wrong!");
       dispatch({
         type: categoryConstants.UPDATE_CATEGORY_FAILURE,
         payload: { error: error?.response?.data.error },
       });
+      throw new Error(error?.response?.data.error || "Something went wrong!");
     }
 
   };
@@ -145,6 +151,7 @@ export const deleteCategory = (id) => {
           draggable: true,
           progress: undefined,
         });
+        return res.data;
       } else {
         const { error } = res.data;
         dispatch({
@@ -152,15 +159,16 @@ export const deleteCategory = (id) => {
           payload: { error: error || "Something went wrong!" },
         });
 
-        toast.error(res.data.error || "Something went wrong!");
+        toast.error(error || "Something went wrong!");
+        throw new Error(error || "Something went wrong!");
       }
     } catch (error) {
-      console.log(error?.response?.data);
       toast.error(error?.response?.data?.error || "Something went wrong!");
       dispatch({
         type: categoryConstants.DELETE_CATEGORY_FAILURE,
         payload: { error: error?.response?.data.error },
       });
+      throw new Error(error?.response?.data.error || "Something went wrong!");
     }
 
   };
