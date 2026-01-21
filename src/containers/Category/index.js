@@ -30,8 +30,7 @@ function Category(props) {
   const [categoryIdUpdate, setCategoryIdUpdate] = useState("");
   const [categoryNameUpdate, setCategoryNameUpdate] = useState("");
   const [categoryImageUpdate, setCategoryImageUpdate] = useState("");
-  const [categoryDescriptionUpdate, setCategoryDescriptionUpdate] =
-    useState("");
+  const [categoryDescriptionUpdate, setCategoryDescriptionUpdate] = useState("");
 
   const [categoryDetailsModal, setCategoryDetailsModal] = useState(false);
   const [categoryDetails, setCategoryDetails] = useState(null);
